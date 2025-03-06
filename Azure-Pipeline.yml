@@ -1,14 +1,10 @@
-trigger:
-  branches:
-    include:
-      - main  # Change to your default branch
+trigger: none
 
-pool:
-  vmImage: 'ubuntu-latest'
+pool: default
 
 variables:
-  AZURE_WEBAPP_NAME: 'your-web-app-name'  # Change this
-  AZURE_RESOURCE_GROUP: 'your-resource-group'  # Change this
+  AZURE_WEBAPP_NAME: 'myAppServicekiranugave'  # Change this
+  AZURE_RESOURCE_GROUP: 'spoke1-rg'  # Change this
   PYTHON_VERSION: '3.9'  # Adjust based on your app
 
 stages:
@@ -52,6 +48,6 @@ stages:
 
     - task: AzureWebApp@1
       inputs:
-        azureSubscription: 'your-service-connection'  # Service connection in Azure DevOps
+        azureSubscription: 'my-azure-service-connection'  # Service connection in Azure DevOps
         appName: '$(AZURE_WEBAPP_NAME)'
         package: '$(System.ArtifactsDirectory)/drop/app.zip'

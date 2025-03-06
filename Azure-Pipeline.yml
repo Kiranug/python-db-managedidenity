@@ -14,10 +14,12 @@ stages:
   - job: Build
     steps:
     - script: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential libpq-dev  # Install necessary build tools and PostgreSQL libraries
         python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r requirements.txt  # Install dependencies (including psycopg2)
       displayName: 'Set Up Virtual Environment & Install Dependencies'
 
     - task: ArchiveFiles@2

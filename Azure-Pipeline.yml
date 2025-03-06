@@ -5,7 +5,7 @@ pool: default
 variables:
   AZURE_WEBAPP_NAME: 'myAppServicekiranugave'  # Change this
   AZURE_RESOURCE_GROUP: 'spoke1-rg'  # Change this
-  PYTHON_VERSION: '3.11'  # Adjust based on your app
+  PYTHON_VERSION: '3.10'  # Adjust based on your app
 
 stages:
 - stage: Build
@@ -17,6 +17,8 @@ stages:
       inputs:
         versionSpec: '$(PYTHON_VERSION)'
         addToPath: true
+      env:
+        GITHUB_TOKEN: $(GITHUB_TOKEN)
 
     - script: |
         python -m venv venv

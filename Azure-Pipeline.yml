@@ -15,7 +15,7 @@ stages:
     steps:
     - script: |
         sudo apt-get update
-        sudo apt-get install -y build-essential libpq-dev  # Install necessary build tools and PostgreSQL libraries
+        sudo apt-get install -y build-essential python3-dev  # Install necessary build tools and PostgreSQL libraries
         python3 -m venv venv
         source venv/bin/activate
         pip install --upgrade pip

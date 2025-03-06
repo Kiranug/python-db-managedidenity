@@ -1,0 +1,57 @@
+trigger:
+  branches:
+    include:
+      - main  # Change to your default branch
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  AZURE_WEBAPP_NAME: 'your-web-app-name'  # Change this
+  AZURE_RESOURCE_GROUP: 'your-resource-group'  # Change this
+  PYTHON_VERSION: '3.9'  # Adjust based on your app
+
+stages:
+- stage: Build
+  displayName: 'Build Application'
+  jobs:
+  - job: Build
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(PYTHON_VERSION)'
+        addToPath: true
+
+    - script: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+      displayName: 'Install Dependencies'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+        replaceExistingArchive: true
+
+    - publish: '$(Build.ArtifactStagingDirectory)/app.zip'
+      artifact: drop
+
+- stage: Deploy
+  displayName: 'Deploy to Azure Web App'
+  jobs:
+  - job: Deploy
+    steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'your-service-connection'  # Service connection in Azure DevOps
+        appName: '$(AZURE_WEBAPP_NAME)'
+        package: '$(System.ArtifactsDirectory)/drop/app.zip'

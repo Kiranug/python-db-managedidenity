@@ -49,5 +49,6 @@ stages:
         ConnectionType: 'AzureRM'
         appType: 'webApp'
         WebAppName: '$(AZURE_WEBAPP_NAME)'
+        ResourceGroupName: '$(AZURE_RESOURCE_GROUP)'
         deployToSlotOrASE: true
         packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'

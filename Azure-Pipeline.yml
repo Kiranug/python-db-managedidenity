@@ -43,8 +43,12 @@ stages:
         artifact: 'drop'
         path: '$(System.ArtifactsDirectory)'
 
-    - task: AzureWebApp@1
+    - task: AzureRmWebAppDeployment@4
       inputs:
         azureSubscription: 'my-azure-service-connection'  # Service connection in Azure DevOps
-        appName: '$(AZURE_WEBAPP_NAME)'
-        package: '$(System.ArtifactsDirectory)/drop/app.zip'
+        ConnectionType: 'AzureRM'
+        appType: 'webApp'
+        WebAppName: '$(AZURE_WEBAPP_NAME)'
+        deployToSlotOrASE: true
+        SlotName: 'Dev'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/app.zip'

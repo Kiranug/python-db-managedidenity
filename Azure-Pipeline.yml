@@ -3,7 +3,7 @@ trigger: none
 pool: default
 
 variables:
-  AZURE_WEBAPP_NAME: 'myAppServicekiranugave'  # Change this
+  AZURE_WEBAPP_NAME: 'starvmdemoapp'  # Change this
   AZURE_RESOURCE_GROUP: 'spoke1-rg'  # Change this
   PYTHON_VERSION: '3.11'  # Adjust based on your app
 

@@ -51,4 +51,4 @@ stages:
         WebAppName: '$(AZURE_WEBAPP_NAME)'
         deployToSlotOrASE: true
         SlotName: 'Dev'
-        packageForLinux: '$(System.ArtifactsDirectory)/drop/app.zip'
+        packageForLinux: '$(Build.ArtifactStagingDirectory)/**/*.zip'

@@ -1,6 +1,7 @@
 trigger: none
 
-pool: default
+pool:
+  vmImage: 'ubuntu-latest'  # Use an Ubuntu agent
 
 variables:
   AZURE_WEBAPP_NAME: 'myAppServicekiranugave'  # Change this
@@ -13,12 +14,26 @@ stages:
   jobs:
   - job: Build
     steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(PYTHON_VERSION)'
+        addToPath: true
+
     - script: |
-        python3.11 -m venv venv
+        python3 --version
+        which python3
+      displayName: 'Verify Python Installation'
+
+    - script: |
+        python3 -m ensurepip --upgrade
+        python3 -m pip install --upgrade pip
+      displayName: 'Ensure Pip is Installed'
+
+    - script: |
+        python3 -m venv venv
         source venv/bin/activate
-        pip install --upgrade pip
         pip install -r requirements.txt
-      displayName: 'Install Dependencies'
+      displayName: 'Set Up Virtual Environment & Install Dependencies'
 
     - task: ArchiveFiles@2
       inputs:
@@ -36,10 +51,10 @@ stages:
   jobs:
   - job: Deploy
     steps:
-    - task: DownloadBuildArtifacts@0
+    - task: DownloadPipelineArtifact@2
       inputs:
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'
+        artifact: 'drop'
+        path: '$(System.ArtifactsDirectory)'
 
     - task: AzureWebApp@1
       inputs:
